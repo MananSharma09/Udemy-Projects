@@ -42,7 +42,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 method:"POST",
                 headers:myHeader,
                 body:graphql,
-                redirect:"follow" 
             };
             const response=await fetch(proxyUrl+targetUrl,requestOptions);
             await new Promise(resolve => setTimeout(resolve, 1000));
@@ -55,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
             displayUserData(parsedData);
         }
         catch (error) {
-            statsContainer.innerHTML = `<p>No data found</p>`
+            statsContainer.innerHTML = `<p>${error.message}</p>`
             console.log(error);
         }
         finally {
@@ -86,6 +85,22 @@ document.addEventListener("DOMContentLoaded", function () {
         UpdateProgress(solvedTotalEasyQues,totalEasyQues,easyLabel,easyProgressCircle);
         UpdateProgress(solvedTotalMediumQues,totalMediumQues,mediumLabel,mediumProgressCircle);
         UpdateProgress(solvedTotalHardQues,totalHardQues,hardLabel,hardProgressCircle);
+
+        const cardsData=[
+            {label :"Overall Submissions",value:parsedData.data.matchedUser.submitStats.totalSubmissionNum[0].submissions},
+            {label :"Overall Easy Submissions",value:parsedData.data.matchedUser.submitStats.totalSubmissionNum[1].submissions},
+            {label :"Overall Medium Submissions",value:parsedData.data.matchedUser.submitStats.totalSubmissionNum[2].submissions},
+            {label :"Overall Hard Submissions",value:parsedData.data.matchedUser.submitStats.totalSubmissionNum[3].submissions},
+        ]
+
+        console.log("Card Data : ",cardsData);
+
+        cardStatsContainer.innerHTML=cardsData.map(
+            data => 
+                `<div class="card">
+                    <h4>${data.label}</h4>
+                    <p>${data.value}</p>
+                </div>`).join("")
     }
 
 
